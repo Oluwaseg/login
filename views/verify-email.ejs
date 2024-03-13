@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+      /* Center the loading spinner */
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container mx-auto py-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-semibold mb-4">Email Verification</h1>
+        <div class="mb-4">
+          <!-- Loading spinner (hidden by default) -->
+          <div class="loading-spinner hidden">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <!-- Verification success message -->
+          <p
+            id="verification-success"
+            class="text-green-500 font-semibold hidden"
+          >
+            Email verified successfully. Redirecting...
+          </p>
+          <!-- Verification error message -->
+          <p id="verification-error" class="text-red-500 font-semibold hidden">
+            Error verifying email. Please try again later.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Function to show loading spinner and hide other elements
+      const showLoadingSpinner = () => {
+        document.querySelector(".loading-spinner").classList.remove("hidden");
+        document.querySelector("#verification-success").classList.add("hidden");
+        document.querySelector("#verification-error").classList.add("hidden");
+      };
+
+      // Function to show verification success message
+      const showVerificationSuccess = () => {
+        document.querySelector(".loading-spinner").classList.add("hidden");
+        document
+          .querySelector("#verification-success")
+          .classList.remove("hidden");
+      };
+
+      // Function to show verification error message
+      const showVerificationError = () => {
+        document.querySelector(".loading-spinner").classList.add("hidden");
+        document
+          .querySelector("#verification-error")
+          .classList.remove("hidden");
+      };
+
+      // Function to verify token
+      const verifyToken = (token) => {
+        // Simulate token verification (replace with actual logic)
+        if (token === "valid_token") {
+          // If token is valid, show verification success message
+          showVerificationSuccess();
+          // Redirect to home page after successful verification
+          setTimeout(() => {
+            window.location.href = "/api/home"; // Replace with your home page URL
+          }, 2000); // Redirect after 2 seconds
+        } else {
+          // If token is invalid, show verification error message
+          showVerificationError();
+        }
+      };
+
+      // Call verifyToken function when page loads
+      window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get("token");
+        if (token) {
+          verifyToken(token);
+        } else {
+          // If token is not provided in URL, show verification error message
+          showVerificationError();
+        }
+      };
+    </script>
+  </body>
+</html>
