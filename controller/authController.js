@@ -1,7 +1,7 @@
 const User = require("../model/user");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-
+const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
@@ -101,6 +101,16 @@ const resendVerificationEmail = async (email) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    if (!validator.isEmail(email)) {
+      req.flash("error_msg", "Invalid email format");
+      return res.redirect("/api/register");
+    }
+
+    if (password.length < 6) {
+      req.flash("error_msg", "Password must be at least 6 characters long");
+      return res.redirect("/api/register");
+    }
 
     const existingUser = await User.findOne({
       $or: [{ email: email }],
